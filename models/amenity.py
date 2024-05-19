@@ -1,23 +1,26 @@
 #!/usr/bin/python3
-"""This is the amenity class"""
-import os
-from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer
+
+"""
+A module that defines the ORM class for Amenity table
+"""
+from os import getenv
+from sqlalchemy import Column
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from models.place import place_amenity
+from models.base_model import Base, BaseModel
 
 
 class Amenity(BaseModel, Base):
-    """This is the class for Amenity
-    Attributes:
-        name: input name
     """
-
+    Defines Amenity class attributes
+    """
     __tablename__ = 'amenities'
-    if os.getenv('HBNB_TYPE_STORAGE') == 'db':
-        name = Column(String(128), nullable=False)
-        place_amenities = relationship('Place',
-                                       secondary=place_amenity,
-                                       back_populates='amenities')
+
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(60), nullable=False)
+        place_amenities = relationship(
+            'Place', secondary=place_amenity, viewonly=False
+        )
     else:
-        name = ""
+        name = ''
