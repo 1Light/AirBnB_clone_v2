@@ -1,192 +1,148 @@
-<img src="https://github.com/johncoleman83/AirBnB_clone/blob/master/dev/HBTN-hbnb-Final.png" width="160" height=auto />
+<center> <h1>HBNB - The Console</h1> </center>
 
-# AirBnB Clone Phase #1
+This repository contains the initial stage of a student project to build a clone of the AirBnB website. This stage implements a backend interface, or console, to manage program data. Console commands allow the user to create, update, and destroy objects, as well as manage file storage. Using a system of JSON serialization/deserialization, storage is persistent between sessions.
 
-: python BaseModel Class, unittests, python CLI, & web static
+---
 
-## Description
+<center><h3>Repository Contents by Project Task</h3> </center>
 
-Project attempts to clone the the AirBnB application and website, including the
-database, storage, RESTful API, Web Framework, and Front End.
+| Tasks | Files | Description |
+| ----- | ----- | ------ |
+| 0: Authors/README File | [AUTHORS](https://github.com/justinmajetich/AirBnB_clone/blob/dev/AUTHORS) | Project authors |
+| 1: Pep8 | N/A | All code is pep8 compliant|
+| 2: Unit Testing | [/tests](https://github.com/justinmajetich/AirBnB_clone/tree/dev/tests) | All class-defining modules are unittested |
+| 3. Make BaseModel | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a parent class to be inherited by all model classes|
+| 4. Update BaseModel w/ kwargs | [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Add functionality to recreate an instance of a class from a dictionary representation|
+| 5. Create FileStorage class | [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/_ _init_ _.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/__init__.py) [/models/base_model.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/base_model.py) | Defines a class to manage persistent file storage system|
+| 6. Console 0.0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Add basic functionality to console program, allowing it to quit, handle empty lines and ^D |
+| 7. Console 0.1 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) | Update the console with methods allowing the user to create, destroy, show, and update stored data |
+| 8. Create User class | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) | Dynamically implements a user class |
+| 9. More Classes | [/models/user.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/user.py) [/models/place.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/place.py) [/models/city.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/city.py) [/models/amenity.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/amenity.py) [/models/state.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/state.py) [/models/review.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/review.py) | Dynamically implements more classes |
+| 10. Console 1.0 | [console.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/console.py) [/models/engine/file_storage.py](https://github.com/justinmajetich/AirBnB_clone/blob/dev/models/engine/file_storage.py) | Update the console and file storage system to work dynamically with all  classes update file storage |
+<br>
+<br>
+<center> <h2>General Use</h2> </center>
 
-## Environment
+1. First clone this repository.
 
-* __OS:__ Ubuntu 14.04 LTS
-* __language:__ Python 3.4.3
-* __style:__ PEP 8 (v. 1.7.0)
+3. Once the repository is cloned locate the "console.py" file and run it as follows:
+```
+/AirBnB_clone$ ./console.py
+```
+4. When this command is run the following prompt should appear:
+```
+(hbnb)
+```
+5. This prompt designates you are in the "HBnB" console. There are a variety of commands available within the console program.
 
-<img src="https://github.com/johncoleman83/AirBnB_clone/blob/master/dev/hbnb_step5.png" />
+##### Commands
+    * create - Creates an instance based on given class
 
-## Testing
+    * destroy - Destroys an object based on class and UUID
+
+    * show - Shows an object based on class and UUID
+
+    * all - Shows all objects the program has access to, or all objects of a given class
+
+    * update - Updates existing attributes an object based on class name and UUID
+
+    * quit - Exits the program (EOF will as well)
 
 
-#### `unittest`
+##### Alternative Syntax
+Users are able to issue a number of console command using an alternative syntax:
 
-This project uses python library, `unittest` to run tests on all python files.
-All unittests are in the `./tests` directory with the command:
+	Usage: <class_name>.<command>([<id>[name_arg value_arg]|[kwargs]])
+Advanced syntax is implemented for the following commands: 
 
-* `python3 -m unittest discover -v ./tests/`
+    * all - Shows all objects the program has access to, or all objects of a given class
 
-The bash script `init_test.sh` executes all these tests:
+	* count - Return number of object instances by class
 
-  * checks `pep8` style
+    * show - Shows an object based on class and UUID
 
-  * runs all unittests
+	* destroy - Destroys an object based on class and UUID
 
-  * runs all w3c_validator tests
+    * update - Updates existing attributes an object based on class name and UUID
 
-  * cleans up all `__pycache__` directories and the storage file, `file.json`
+<br>
+<br>
+<center> <h2>Examples</h2> </center>
+<h3>Primary Command Syntax</h3>
 
-**Usage:**
+###### Example 0: Create an object
+Usage: create <class_name>
+```
+(hbnb) create BaseModel
+```
+```
+(hbnb) create BaseModel
+3aa5babc-efb6-4041-bfe9-3cc9727588f8
+(hbnb)                   
+```
+###### Example 1: Show an object
+Usage: show <class_name> <_id>
 
 ```
-$ ./dev/init_test.sh
+(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
+[BaseModel] (3aa5babc-efb6-4041-bfe9-3cc9727588f8) {'id': '3aa5babc-efb6-4041-bfe9-3cc9727588f8', 'created_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96959), 
+'updated_at': datetime.datetime(2020, 2, 18, 14, 21, 12, 96971)}
+(hbnb)  
+```
+###### Example 2: Destroy an object
+Usage: destroy <class_name> <_id>
+```
+(hbnb) destroy BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
+(hbnb) show BaseModel 3aa5babc-efb6-4041-bfe9-3cc9727588f8
+** no instance found **
+(hbnb)   
+```
+###### Example 3: Update an object
+Usage: update <class_name> <_id>
+```
+(hbnb) update BaseModel b405fc64-9724-498f-b405-e4071c3d857f first_name "person"
+(hbnb) show BaseModel b405fc64-9724-498f-b405-e4071c3d857f
+[BaseModel] (b405fc64-9724-498f-b405-e4071c3d857f) {'id': 'b405fc64-9724-498f-b405-e4071c3d857f', 'created_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729889), 
+'updated_at': datetime.datetime(2020, 2, 18, 14, 33, 45, 729907), 'first_name': 'person'}
+(hbnb)
+```
+<h3>Alternative Syntax</h3>
+
+###### Example 0: Show all User objects
+Usage: <class_name>.all()
+```
+(hbnb) User.all()
+["[User] (99f45908-1d17-46d1-9dd2-b7571128115b) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92071), 'id': '99f45908-1d17-46d1-9dd2-b7571128115b', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 34, 92056)}", "[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
 
-#### CLI Interactive Tests
-
-This project uses python library, `cmd` to run tests in an interactive command
-line interface.  To begin tests with the CLI, run this script:
-
+###### Example 1: Destroy a User
+Usage: <class_name>.destroy(<_id>)
 ```
-$ ./console.py
+(hbnb) User.destroy("99f45908-1d17-46d1-9dd2-b7571128115b")
+(hbnb)
+(hbnb) User.all()
+(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
-
-* For a detailed description of all tests, run these commands inside the
-custom CLI:
-
+###### Example 2: Update User (by attribute)
+Usage: <class_name>.update(<_id>, <attribute_name>, <attribute_value>)
 ```
-$ ./console.py
-(hbnb) help help
-List available commands with "help" or detailed help with "help cmd".
-(hbnb) help
-
-Documented commands (type help <topic>):
-========================================
-Amenity    City  Place   State  airbnb  create   help  show
-BaseModel  EOF   Review  User   all     destroy  quit  update
-
-(hbnb) help User
-class method with .function() syntax
-        Usage: User.<command>(<id>)
-(hbnb) help create
-create: create [ARG]
-        ARG = Class Name
-        SYNOPSIS: Creates a new instance of the Class from given input ARG
-        EXAMPLE: create City
-                 City.create()
+(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", name "Todd the Toad")
+(hbnb)
+(hbnb) User.all()
+(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'name': 'Todd the Toad', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
 ```
+###### Example 3: Update User (by dictionary)
+Usage: <class_name>.update(<_id>, <dictionary>)
+```
+(hbnb) User.update("98bea5de-9cb0-4d78-8a9d-c4de03521c30", {'name': 'Fred the Frog', 'age': 9})
+(hbnb)
+(hbnb) User.all()
+(hbnb) ["[User] (98bea5de-9cb0-4d78-8a9d-c4de03521c30) {'updated_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134362), 'name': 'Fred the Frog', 'age': 9, 'id': '98bea5de-9cb0-4d78-8a9d-c4de03521c30', 'created_at': datetime.datetime(2020, 2, 19, 21, 47, 29, 134343)}"]
+```
+<br>
 
-* Tests in the CLI may also be executed with this syntax:
 
-  * **destroy:** `<class name>.destroy(<id>)`
-
-  * **update:** `<class name>.update(<id>, <attribute name>, <attribute value>)`
-
-  * **update with dictionary:** `<class name>.update(<id>, <dictionary representation>)`
-
-
-#### Continuous Integration
-
-Uses [Travis-CI](https://travis-ci.org/) to run all tests on all commits to the
-github repo
-
-## Authors
-
-* MJ Johnson, [@mj31508](https://github.com/mj31508)
-* David John Coleman II, [davidjohncoleman.com](http://www.davidjohncoleman.com/)
-
-## License
-
-Public Domain, no copyright protection
--setup_web_static.sh
--pack_web_static.py
--do_deploy_web_static.py
--deploy_web_static.py
-00-clean_web_static.py
-<!-- Task Body -->
-  <p>Write a Bash script that sets up your web servers for the deployment of <code>web_static</code>. It must:</p>
-
-<ul>
-<li>Install Nginx if it not already installed</li>
-<li>Create the folder <code>/data/</code> if it doesn&#39;t already exist</li>
-<li>Create the folder <code>/data/web_static/</code> if it doesn&#39;t already exist</li>
-<li>Create the folder <code>/data/web_static/releases/</code> if it doesn&#39;t already exist</li>
-<li>Create the folder <code>/data/web_static/shared/</code> if it doesn&#39;t already exist</li>
-<li>Create the folder <code>/data/web_static/releases/test/</code> if it doesn&#39;t already exist</li>
-<li>Create a fake HTML file <code>/data/web_static/releases/test/index.html</code> (with simple content, to test your Nginx configuration)</li>
-<li>Create a symbolic link <code>/data/web_static/current</code> linked to the <code>/data/web_static/releases/test/</code> folder. If the symbolic link already exists, it should be deleted and recreated every time the script is ran.</li>
-<li>Give ownership of the <code>/data/</code> folder to the <code>ubuntu</code> user AND group (you can assume this user and group exist). This should be recursive; everything inside should be created/owned by this user/group.</li>
-<li>Update the Nginx configuration to serve the content of <code>/data/web_static/current/</code> to <code>hbnb_static</code> (ex: <code>https://mydomainname.tech/hbnb_static</code>). Don&#39;t forget to restart Nginx after updating the configuration:
-
-<ul>
-<li>Use <code>alias</code> inside your Nginx configuration</li>
-<li><a href="http://stackoverflow.com/questions/10631933/nginx-static-file-serving-confusion-with-root-alias">Tip</a></li>
-</ul></li>
-</ul>
-
-<p>Your program should always exit successfully.
-<strong>Don&#39;t forget to run your script on both of your web servers.</strong></p>
-
-<!-- Task Body -->
-  <p>Write a Fabric script that generates a <a href="https://en.wikipedia.org/wiki/Tar_(computing)">.tgz</a> archive from the contents of the <code>web_static</code> folder of your AirBnB Clone repo, using the function <code>do_pack</code>.</p>
-
-<ul>
-<li>Prototype: <code>def do_pack():</code></li>
-<li>All files in the folder <code>web_static</code> must be added to the final archive</li>
-<li>All archives must be stored in the folder <code>versions</code> (your function should create this folder if it doesn&#39;t exist)</li>
-<li>The name of the archive created must be <code>web_static_&lt;year&gt;&lt;month&gt;&lt;day&gt;&lt;hour&gt;&lt;minute&gt;&lt;second&gt;.tgz</code></li>
-<li>The function <code>do_pack</code> must return the archive path if the archive has been correctly generated. Otherwise, it should return <code>None</code></li>
-</ul>
-
-<!-- Task Body -->
-  <p>Write a Fabric script (based on the file <code>1-pack_web_static.py</code>) that distributes an archive to your web servers, using the function <code>do_deploy</code>:</p>
-
-<ul>
-<li>Prototype: <code>def do_deploy(archive_path):</code></li>
-<li>Returns <code>False</code> if the file at the path <code>archive_path</code> doesn&#39;t exist</li>
-<li>The script should take the following steps:
-
-<ul>
-<li>Upload the archive to the <code>/tmp/</code> directory of the web server</li>
-<!-- Task Body -->
-  <p>Write a Fabric script (based on the file <code>2-do_deploy_web_static.py</code>) that creates and distributes an archive to your web servers, using the function <code>deploy</code>:</p>
-
-<ul>
-<li>Prototype: <code>def deploy():</code></li>
-<li>The script should take the following steps:
-
-<ul>
-<li>Call the <code>do_pack()</code> function and store the path of the created archive</li>
-<li>Return <code>False</code> if no archive has been created</li>
-<li>Call the <code>do_deploy(archive_path)</code> function, using the new path of the new archive</li>
-<li>Return the return value of <code>do_deploy</code></li>
-</ul></li>
-<li>All remote commands must be executed on both of web your servers (using <code>env.hosts = [&#39;&lt;IP web-01&gt;&#39;, &#39;IP web-02&#39;]</code> variable in your script)</li>
-</ul>
-
-<p>In the following example, the SSH key and the username used for accessing to the server are passed in the command line. Of course, you could define them as Fabric environment variables (ex: env.user =...)</p>
-
-<!-- Task Body -->
-  <p>Write a Fabric script (based on the file <code>3-deploy_web_static.py</code>) that deletes out-of-date archives, using the function <code>do_clean</code>:</p>
-
-<ul>
-<li>Prototype: <code>def do_clean(number=0):</code></li>
-<li><code>number</code> is the number of the archives, including the most recent, to keep.
-
-<ul>
-<li>If <code>number</code> is 0 or 1, keep only the most recent version of your archive. </li>
-<li>if <code>number</code> is 2, keep the most recent, and second most recent versions of your archive.</li>
-<li>etc.</li>
-</ul></li>
-<li>Your script should:
-
-<ul>
-<li>Delete all unnecessary archives (all archives minus the number to keep) in the <code>versions</code> folder</li>
-<li>Delete all unnecessary archives (all archives minus the number to keep) in the <code>/data/web_static/releases</code> folder of both of your web servers</li>
-</ul></li>
-<li>All remote commands must be executed on both of your web servers (using the <code>env.hosts = [&#39;&lt;IP web-01&gt;&#39;, &#39;IP web-02&#39;]</code> variable in your script)</li>
-</ul>
-
-<p>In the following example, the SSH key and the username used for accessing to the server are passed in the command line. Of course, you could define them as Fabric environment variables (ex: env.user =...)</p>
-
+##### Project Team:
+```
+- Amarachi Omereife (Editor: @marameref)
+- Joseph Uzor (@juzorh)

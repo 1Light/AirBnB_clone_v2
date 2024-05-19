@@ -1,28 +1,30 @@
 #!/usr/bin/python3
-"""This module uses Flask and starts a web application"""
-
+""" Write a script that starts a Flask web application:
+Your web application must be listening on 0.0.0.0, port 5000
+"""
 
 from flask import Flask
-app = Flask(__name__)
+
+app = Flask("__name__")
 
 
 @app.route('/', strict_slashes=False)
-def hello_hbnb():
-    """Hello world for flask"""
-    return "Hello HBNB!"
+def hello():
+    """Return a given string"""
+    return ("Hello HBNB!")
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route("/hbnb", strict_slashes=False)
 def hbnb():
-    """display HBNB for /hbnb"""
-    return "HBNB"
+    """Returns a given string"""
+    return ("HBNB")
 
 
-@app.route('/c/<string:text>')
-def c_route(text):
-    """display `C` followed by value of text variable
-    replace underscores with a space"""
-    return "C {:s}".format(text.replace("_", " "))
+@app.route("/c/<text>", strict_slashes=False)
+def cText(text):
+    """display C followed by the value of the text variable"""
+    return "C {}".format(text.replace("_", " "))
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port=5000, debug=None)
