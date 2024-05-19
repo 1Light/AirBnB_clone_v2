@@ -1,311 +1,192 @@
-<h1 align="center">AirBnB clone v2</h1>
+<img src="https://github.com/johncoleman83/AirBnB_clone/blob/master/dev/HBTN-hbnb-Final.png" width="160" height=auto />
 
-## Objectives
+# AirBnB Clone Phase #1
 
-- What is Unit testing and how to implement it in a large project
-- What is `*args` and how to use it
-- What is `**kwargs` and how to use it
-- How to handle named arguments in a function
-- How to create a `MySQL` database
-- How to create a `MySQL` user and grant it privileges
-- What ORM means
-- How to map a `Python Class` to a `MySQL` table
-- How to handle 2 different storage engines with the same codebase
-- How to use environment variables
+: python BaseModel Class, unittests, python CLI, & web static
 
----
+## Description
 
-### Project phase at last modification
+Project attempts to clone the the AirBnB application and website, including the
+database, storage, RESTful API, Web Framework, and Front End.
 
-- Understanding and building a web framework with Flask
-- What is a route, how to define routes, and handle variables in routes
-- What is template, how to create dynamic templates and render them in Flask
+## Environment
 
-<p align="center">
-  <img src="./doc/images/hbnb_step3.png" alt="HolbertonBnB stack">
-</p>
+* __OS:__ Ubuntu 14.04 LTS
+* __language:__ Python 3.4.3
+* __style:__ PEP 8 (v. 1.7.0)
 
----
-
-### Classes
-
-AirBnB clone implements the following classes:
-
-* BaseModel
-* User
-* State
-* City
-* Amenity
-* Place
-* Review
-
-## Storage
-
-The above classes are handled by one of either two abstracted storage engines,
-depending on the call - [FileStorage](./models/engine/file_storage.py) or
-[DBStorage](./models/engine/db_storage.py).
-
-### FileStorage
-
-The default mode.
-
-In `FileStorage` mode, every time the backend is initialized, HolbertonBnB
-instantiates an instance of `FileStorage` called `storage`. The `storage`
-object is loaded/re-loaded from any class instances stored in the JSON file
-`file.json`. As class instances are created, updated, or deleted, the
-`storage` object is used to register corresponding changes in the `file.json`.
-
-### DBStorage
-
-Run by setting the environmental variables `HBNB_TYPE_STORAGE=db`.
-
-In `DBStorage` mode, every time the backend is initialized, HolbertonBnB
-instantiates an instance of `DBStorage` called `storage`. The `storage` object
-is loaded/re-loaded from the MySQL database specified in the environmental variable
-`HBNB_MYSQL_DB`, using the user `HBNB_MYSQL_USER`, password `HBNB_MYSQL_PWD`, and
-host `HBNB_MYSQL_HOST`. As class instances are created, updated, or deleted, the
-`storage` object is used to register changes in the corresponding MySQL database.
-Connection and querying is achieved using SQLAlchemy.
-
-Note that the databases specified for `DBStorage` to connect to must already be
-defined on the MySQL server. This repository includes scripts
-[setup_mysql_dev.sql](./setup_mysql_dev.sql) and [setup_mysql_test.sql](./setup_mysql_test.sql)
-to set up `hbnb_dev_db` and `hbnb_test_db` databases in a MySQL server,
-respectively.
-
-## Console
-
-The console is a command line interpreter that permits management of the backend
-of HolbertonBnB. It can be used to handle and manipulate all classes utilized by
-the application (achieved by calls on the `storage` object defined above).
-
-### Using the Console
-
-The HolbertonBnB console can be run both interactively and non-interactively.
-To run the console in non-interactive mode, pipe any command(s) into an execution
-of the file `console.py` at the command line.
-
-```
-$ echo "help" | ./console.py
-(hbnb)
-Documented commands (type help <topic>):
-========================================
-EOF  all  count  create  destroy  help  quit  show  update
-
-(hbnb)
-$
-```
-
-Alternatively, to use the HolbertonBnB console in interactive mode, run the
-file `console.py` by itself:
-
-```
-$ ./console.py
-```
-
-Remember, the console can be run with `storage` instantiated in either `FileStorage`
-or `DBStorage` mode. The above examples instantiate `FileStorage` by default, but
-`DBStorage` can be instantiated like so:
-
-```
-$ HBNB_MYSQL_USER=hbnb_dev HBNB_MYSQL_PWD=hbnb_dev_pwd HBNB_MYSQL_HOST=localhost HBNB_MYSQL_DB=hbnb_dev_db HBNB_TYPE_STORAGE=db ./console.py
-```
-
-The console functions identically regardless of the `storage` mode.
-
-While running in interactive mode, the console displays a prompt for input:
-
-```
-$ ./console.py
-(hbnb)
-```
-
-To quit the console, enter the command `quit`, or input an EOF signal
-(`ctrl-D`).
-
-```
-$ ./console.py
-(hbnb) quit
-$
-```
-
-```
-$ ./console.py
-(hbnb) EOF
-$
-```
-
-### Console Commands
-
-The HolbertonBnB console supports the following commands:
-
-#### create
-* Usage: `create <class> <param 1 name>=<param 1 value> <param 2 name>=<param 2 value> ...`
-
-Creates a new instance of a given class. The class' ID is printed and
-the instance is saved to the file `file.json`. When passing parameter key/value
-pairs, any underscores contained in value strings are replaced by spaces.
-
-```
-$ ./console.py
-(hbnb) create BaseModel
-119be863-6fe5-437e-a180-b9892e8746b8
-(hbnb)
-(hbnb) create State name="California"
-(hbnb) quit
-$ cat file.json ; echo ""
-{"BaseModel.119be863-6fe5-437e-a180-b9892e8746b8": {"updated_at": "2019-02-17T2
-1:30:42.215277", "created_at": "2019-02-17T21:30:42.215277", "__class__": "Base
-Model", "id": "119be863-6fe5-437e-a180-b9892e8746b8"}, {'id': 'd80e0344-63eb-43
-4a-b1e0-07783522124e', 'created_at': datetime.datetime(2017, 11, 10, 4, 41, 7, 
-842160), 'updated_at': datetime.datetime(2017, 11, 10, 4, 41, 7, 842235), 'name
-': 'California'}}
-```
-
-#### show
-* Usage: `show <class> <id>` or `<class>.show(<id>)`
-
-Prints the string representation of a class instance based on a given id.
-
-```
-$ ./console.py
-(hbnb) create User
-1e32232d-5a63-4d92-8092-ac3240b29f46
-(hbnb)
-(hbnb) show User 1e32232d-5a63-4d92-8092-ac3240b29f46
-[User] (1e32232d-5a63-4d92-8092-ac3240b29f46) {'id': '1e32232d-5a63-4d92-8092-a
-c3240b29f46', 'created_at': datetime.datetime(2019, 2, 17, 21, 34, 3, 635828), 
-'updated_at': datetime.datetime(2019, 2, 17, 21, 34, 3, 635828)}
-(hbnb)
-(hbnb) User.show(1e32232d-5a63-4d92-8092-ac3240b29f46)
-[User] (1e32232d-5a63-4d92-8092-ac3240b29f46) {'id': '1e32232d-5a63-4d92-8092-a
-c3240b29f46', 'created_at': datetime.datetime(2019, 2, 17, 21, 34, 3, 635828), 
-'updated_at': datetime.datetime(2019, 2, 17, 21, 34, 3, 635828)}
-(hbnb)
-```
-
-#### destroy
-* Usage: `destroy <class> <id>` or `<class>.destroy(<id>)`
-
-Deletes a class instance based on a given id.
-
-```
-$ ./console.py
-(hbnb) create State
-d2d789cd-7427-4920-aaae-88cbcf8bffe2
-(hbnb) create Place
-3e-8329-4f47-9947-dca80c03d3ed
-(hbnb)
-(hbnb) destroy State d2d789cd-7427-4920-aaae-88cbcf8bffe2
-(hbnb) Place.destroy(03486a3e-8329-4f47-9947-dca80c03d3ed)
-(hbnb) quit
-$ cat file.json ; echo ""
-{}
-```
-
-#### all
-* Usage: `all` or `all <class>` or `<class>.all()`
-
-Prints the string representations of all instances of a given class. If no
-class name is provided, the command prints all instances of every class.
-
-```
-$ ./console.py
-(hbnb) create BaseModel
-fce2124c-8537-489b-956e-22da455cbee8
-(hbnb) create BaseModel
-450490fd-344e-47cf-8342-126244c2ba99
-(hbnb) create User
-b742dbc3-f4bf-425e-b1d4-165f52c6ff81
-(hbnb) create User
-8f2d75c8-fb82-48e1-8ae5-2544c909a9fe
-(hbnb)
-(hbnb) all BaseModel
-["[BaseModel] (450490fd-344e-47cf-8342-126244c2ba99) {'updated_at': datetime.da
-tetime(2019, 2, 17, 21, 45, 5, 963516), 'created_at': datetime.datetime(2019, 2
-, 17, 21, 45, 5, 963516), 'id': '450490fd-344e-47cf-8342-126244c2ba99'}", "[Bas
-eModel] (fce2124c-8537-489b-956e-22da455cbee8) {'updated_at': datetime.datetime
-(2019, 2, 17, 21, 43, 56, 899348), 'created_at': datetime.datetime(2019, 2, 17,
-21, 43, 56, 899348), 'id': 'fce2124c-8537-489b-956e-22da455cbee8'}"]
-(hbnb)
-(hbnb) User.all()
-["[User] (8f2d75c8-fb82-48e1-8ae5-2544c909a9fe) {'updated_at': datetime.datetim
-e(2019, 2, 17, 21, 44, 44, 428413), 'created_at': datetime.datetime(2019, 2, 17
-, 21, 44, 44, 428413), 'id': '8f2d75c8-fb82-48e1-8ae5-2544c909a9fe'}", "[User] 
-(b742dbc3-f4bf-425e-b1d4-165f52c6ff81) {'updated_at': datetime.datetime(2019, 2
-, 17, 21, 44, 15, 974608), 'created_at': datetime.datetime(2019, 2, 17, 21, 44,
-15, 974608), 'id': 'b742dbc3-f4bf-425e-b1d4-165f52c6ff81'}"]
-(hbnb)
-(hbnb) all
-["[User] (8f2d75c8-fb82-48e1-8ae5-2544c909a9fe) {'updated_at': datetime.datetim
-e(2019, 2, 17, 21, 44, 44, 428413), 'created_at': datetime.datetime(2019, 2, 17
-, 21, 44, 44, 428413), 'id': '8f2d75c8-fb82-48e1-8ae5-2544c909a9fe'}", "[BaseMo
-del] (450490fd-344e-47cf-8342-126244c2ba99) {'updated_at': datetime.datetime(20
-19, 2, 17, 21, 45, 5, 963516), 'created_at': datetime.datetime(2019, 2, 17, 21,
-45, 5, 963516), 'id': '450490fd-344e-47cf-8342-126244c2ba99'}", "[User] (b742db
-c3-f4bf-425e-b1d4-165f52c6ff81) {'updated_at': datetime.datetime(2019, 2, 17, 2
-1, 44, 15, 974608), 'created_at': datetime.datetime(2019, 2, 17, 21, 44, 15, 97
-4608), 'id': 'b742dbc3-f4bf-425e-b1d4-165f52c6ff81'}", "[BaseModel] (fce2124c-8
-537-489b-956e-22da455cbee8) {'updated_at': datetime.datetime(2019, 2, 17, 21, 4
-3, 56, 899348), 'created_at': datetime.datetime(2019, 2, 17, 21, 43, 56, 899348
-), 'id': 'fce2124c-8537-489b-956e-22da455cbee8'}"]
-(hbnb)
-```
-
-#### count
-* Usage: `count <class>` or `<class>.count()`
-
-Retrieves the number of instances of a given class.
-
-```
-$ ./console.py
-(hbnb) create Place
-12c73223-f3d3-4dec-9629-bd19c8fadd8a
-(hbnb) create Place
-aa229cbb-5b19-4c32-8562-f90a3437d301
-(hbnb) create City
-22a51611-17bd-4d8f-ba1b-3bf07d327208
-(hbnb)
-(hbnb) count Place
-2
-(hbnb) city.count()
-1
-(hbnb)
-```
-
-#### update
-* Usage: `update <class> <id> <attribute name> "<attribute value>"`
-
-Updates a class instance based on a given id with a given key/value attribute
-pair or dictionary of attribute pairs. If `update` is called with a single
-key/value attribute pair, only "simple" attributes can be updated (ie. not
-`id`, `created_at`, and `updated_at`).
-
-```
-$ ./console.py
-(hbnb) create User
-6f348019-0499-420f-8eec-ef0fdc863c02
-(hbnb)
-(hbnb) update User 6f348019-0499-420f-8eec-ef0fdc863c02 first_name "Holberton" 
-(hbnb) show User 6f348019-0499-420f-8eec-ef0fdc863c02
-[User] (6f348019-0499-420f-8eec-ef0fdc863c02) {'created_at': datetime.datetime(
-2019, 2, 17, 21, 54, 39, 234382), 'first_name': 'Holberton', 'updated_at': date
-time.datetime(2019, 2, 17, 21, 54, 39, 234382), 'id': '6f348019-0499-420f-8eec-
-ef0fdc863c02'}
-(hbnb)
-```
+<img src="https://github.com/johncoleman83/AirBnB_clone/blob/master/dev/hbnb_step5.png" />
 
 ## Testing
 
-Unittests for the HolbertonBnB project are defined in the [tests](./tests)
-folder. To run the entire test suite simultaneously, execute the following command:
+
+#### `unittest`
+
+This project uses python library, `unittest` to run tests on all python files.
+All unittests are in the `./tests` directory with the command:
+
+* `python3 -m unittest discover -v ./tests/`
+
+The bash script `init_test.sh` executes all these tests:
+
+  * checks `pep8` style
+
+  * runs all unittests
+
+  * runs all w3c_validator tests
+
+  * cleans up all `__pycache__` directories and the storage file, `file.json`
+
+**Usage:**
 
 ```
-$ python3 unittest -m discover tests
+$ ./dev/init_test.sh
 ```
 
-Alternatively, you can specify a single test file to run at a time:
+#### CLI Interactive Tests
+
+This project uses python library, `cmd` to run tests in an interactive command
+line interface.  To begin tests with the CLI, run this script:
 
 ```
-$ python3 unittest -m tests/test_console.py
+$ ./console.py
 ```
+
+* For a detailed description of all tests, run these commands inside the
+custom CLI:
+
+```
+$ ./console.py
+(hbnb) help help
+List available commands with "help" or detailed help with "help cmd".
+(hbnb) help
+
+Documented commands (type help <topic>):
+========================================
+Amenity    City  Place   State  airbnb  create   help  show
+BaseModel  EOF   Review  User   all     destroy  quit  update
+
+(hbnb) help User
+class method with .function() syntax
+        Usage: User.<command>(<id>)
+(hbnb) help create
+create: create [ARG]
+        ARG = Class Name
+        SYNOPSIS: Creates a new instance of the Class from given input ARG
+        EXAMPLE: create City
+                 City.create()
+```
+
+* Tests in the CLI may also be executed with this syntax:
+
+  * **destroy:** `<class name>.destroy(<id>)`
+
+  * **update:** `<class name>.update(<id>, <attribute name>, <attribute value>)`
+
+  * **update with dictionary:** `<class name>.update(<id>, <dictionary representation>)`
+
+
+#### Continuous Integration
+
+Uses [Travis-CI](https://travis-ci.org/) to run all tests on all commits to the
+github repo
+
+## Authors
+
+* MJ Johnson, [@mj31508](https://github.com/mj31508)
+* David John Coleman II, [davidjohncoleman.com](http://www.davidjohncoleman.com/)
+
+## License
+
+Public Domain, no copyright protection
+-setup_web_static.sh
+-pack_web_static.py
+-do_deploy_web_static.py
+-deploy_web_static.py
+00-clean_web_static.py
+<!-- Task Body -->
+  <p>Write a Bash script that sets up your web servers for the deployment of <code>web_static</code>. It must:</p>
+
+<ul>
+<li>Install Nginx if it not already installed</li>
+<li>Create the folder <code>/data/</code> if it doesn&#39;t already exist</li>
+<li>Create the folder <code>/data/web_static/</code> if it doesn&#39;t already exist</li>
+<li>Create the folder <code>/data/web_static/releases/</code> if it doesn&#39;t already exist</li>
+<li>Create the folder <code>/data/web_static/shared/</code> if it doesn&#39;t already exist</li>
+<li>Create the folder <code>/data/web_static/releases/test/</code> if it doesn&#39;t already exist</li>
+<li>Create a fake HTML file <code>/data/web_static/releases/test/index.html</code> (with simple content, to test your Nginx configuration)</li>
+<li>Create a symbolic link <code>/data/web_static/current</code> linked to the <code>/data/web_static/releases/test/</code> folder. If the symbolic link already exists, it should be deleted and recreated every time the script is ran.</li>
+<li>Give ownership of the <code>/data/</code> folder to the <code>ubuntu</code> user AND group (you can assume this user and group exist). This should be recursive; everything inside should be created/owned by this user/group.</li>
+<li>Update the Nginx configuration to serve the content of <code>/data/web_static/current/</code> to <code>hbnb_static</code> (ex: <code>https://mydomainname.tech/hbnb_static</code>). Don&#39;t forget to restart Nginx after updating the configuration:
+
+<ul>
+<li>Use <code>alias</code> inside your Nginx configuration</li>
+<li><a href="http://stackoverflow.com/questions/10631933/nginx-static-file-serving-confusion-with-root-alias">Tip</a></li>
+</ul></li>
+</ul>
+
+<p>Your program should always exit successfully.
+<strong>Don&#39;t forget to run your script on both of your web servers.</strong></p>
+
+<!-- Task Body -->
+  <p>Write a Fabric script that generates a <a href="https://en.wikipedia.org/wiki/Tar_(computing)">.tgz</a> archive from the contents of the <code>web_static</code> folder of your AirBnB Clone repo, using the function <code>do_pack</code>.</p>
+
+<ul>
+<li>Prototype: <code>def do_pack():</code></li>
+<li>All files in the folder <code>web_static</code> must be added to the final archive</li>
+<li>All archives must be stored in the folder <code>versions</code> (your function should create this folder if it doesn&#39;t exist)</li>
+<li>The name of the archive created must be <code>web_static_&lt;year&gt;&lt;month&gt;&lt;day&gt;&lt;hour&gt;&lt;minute&gt;&lt;second&gt;.tgz</code></li>
+<li>The function <code>do_pack</code> must return the archive path if the archive has been correctly generated. Otherwise, it should return <code>None</code></li>
+</ul>
+
+<!-- Task Body -->
+  <p>Write a Fabric script (based on the file <code>1-pack_web_static.py</code>) that distributes an archive to your web servers, using the function <code>do_deploy</code>:</p>
+
+<ul>
+<li>Prototype: <code>def do_deploy(archive_path):</code></li>
+<li>Returns <code>False</code> if the file at the path <code>archive_path</code> doesn&#39;t exist</li>
+<li>The script should take the following steps:
+
+<ul>
+<li>Upload the archive to the <code>/tmp/</code> directory of the web server</li>
+<!-- Task Body -->
+  <p>Write a Fabric script (based on the file <code>2-do_deploy_web_static.py</code>) that creates and distributes an archive to your web servers, using the function <code>deploy</code>:</p>
+
+<ul>
+<li>Prototype: <code>def deploy():</code></li>
+<li>The script should take the following steps:
+
+<ul>
+<li>Call the <code>do_pack()</code> function and store the path of the created archive</li>
+<li>Return <code>False</code> if no archive has been created</li>
+<li>Call the <code>do_deploy(archive_path)</code> function, using the new path of the new archive</li>
+<li>Return the return value of <code>do_deploy</code></li>
+</ul></li>
+<li>All remote commands must be executed on both of web your servers (using <code>env.hosts = [&#39;&lt;IP web-01&gt;&#39;, &#39;IP web-02&#39;]</code> variable in your script)</li>
+</ul>
+
+<p>In the following example, the SSH key and the username used for accessing to the server are passed in the command line. Of course, you could define them as Fabric environment variables (ex: env.user =...)</p>
+
+<!-- Task Body -->
+  <p>Write a Fabric script (based on the file <code>3-deploy_web_static.py</code>) that deletes out-of-date archives, using the function <code>do_clean</code>:</p>
+
+<ul>
+<li>Prototype: <code>def do_clean(number=0):</code></li>
+<li><code>number</code> is the number of the archives, including the most recent, to keep.
+
+<ul>
+<li>If <code>number</code> is 0 or 1, keep only the most recent version of your archive. </li>
+<li>if <code>number</code> is 2, keep the most recent, and second most recent versions of your archive.</li>
+<li>etc.</li>
+</ul></li>
+<li>Your script should:
+
+<ul>
+<li>Delete all unnecessary archives (all archives minus the number to keep) in the <code>versions</code> folder</li>
+<li>Delete all unnecessary archives (all archives minus the number to keep) in the <code>/data/web_static/releases</code> folder of both of your web servers</li>
+</ul></li>
+<li>All remote commands must be executed on both of your web servers (using the <code>env.hosts = [&#39;&lt;IP web-01&gt;&#39;, &#39;IP web-02&#39;]</code> variable in your script)</li>
+</ul>
+
+<p>In the following example, the SSH key and the username used for accessing to the server are passed in the command line. Of course, you could define them as Fabric environment variables (ex: env.user =...)</p>
+

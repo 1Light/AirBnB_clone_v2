@@ -1,43 +1,28 @@
 #!/usr/bin/python3
-"""
-A script that starts a Flask web application:
-"""
+"""This module uses Flask and starts a web application"""
+
 
 from flask import Flask
-
 app = Flask(__name__)
 
 
 @app.route('/', strict_slashes=False)
-def hello_route():
-    """
-    Displays 'Hello HBNB!'
-    Returns:
-        str: "Hello HBNB"
-    """
+def hello_hbnb():
+    """Hello world for flask"""
     return "Hello HBNB!"
 
 
 @app.route('/hbnb', strict_slashes=False)
-def hbnb_route():
-    """
-    Displays 'HBNB'
-    Returns:
-        str: "HBNB"
-    """
+def hbnb():
+    """display HBNB for /hbnb"""
     return "HBNB"
 
 
-@app.route('/c/<text>', strict_slashes=False)
+@app.route('/c/<string:text>')
 def c_route(text):
-    """
-    display “C ” followed by the value of the text variable
-        (replace underscore '_' symbols with a space ' ')
-    Returns:
-        str: "C <text>"
-    """
-    return "C {}".format(text.replace('_', ' '))
-
+    """display `C` followed by value of text variable
+    replace underscores with a space"""
+    return "C {:s}".format(text.replace("_", " "))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port="5000")

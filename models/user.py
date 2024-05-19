@@ -1,31 +1,34 @@
 #!/usr/bin/python3
+"""
+User Class from Models Module
+"""
 
-"""
-A module that defines the ORM class for User table
-"""
-from os import getenv
-from models.base_model import Base, BaseModel
-from sqlalchemy import Column, String
+from models.base_model import BaseModel, Base
+import sqlalchemy
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
+import os
 
 
 class User(BaseModel, Base):
-    """
-    Defines attributes for User table
-    """
-    __tablename__ = 'users'
+    """User class handles all application users"""
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
+    if os.getenv('HBNB_TYPE_STORAGE', 'fs') == 'db':
+        __tablename__ = 'users'
         email = Column(String(128), nullable=False)
         password = Column(String(128), nullable=False)
-        first_name = Column(String(128), nullable=True)
-        last_name = Column(String(128), nullable=True)
-        places = relationship(
-            'Place', backref='user', cascade='all, delete')
-        reviews = relationship(
-            'Review', backref='user', cascade='all, delete')
+        first_name = Column(String(128))
+        last_name = Column(String(128))
+        places = relationship('Place', cascade="all, delete", backref='user')
+        reviews = relationship('Review', cascade="all, delete", backref='user')
     else:
-        email = ''
-        password = ''
-        first_name = ''
-        last_name = ''
+        email = ""
+        password = ""
+        first_name = ""
+        last_name = ""
+
+    def __init__(self, *args, **kwargs):
+        """instantiates a new user"""
+        super().__init__(self, *args, **kwargs)
